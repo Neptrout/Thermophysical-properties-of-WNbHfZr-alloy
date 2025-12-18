@@ -1,0 +1,57 @@
+# W-Nb-Hf-Zr
+
+units             metal
+boundary          p p p
+atom_style        atomic
+
+variable          x equal 3300
+read_restart      restart.$x
+
+pair_style        deepmd graph-compress.pb
+pair_coeff       * * W Nb Hf Zr
+
+mass                 1 183.85
+mass                 2 92.90
+mass                 3 178.49
+mass                 4 91.22
+
+timestep          0.001
+thermo            20
+thermo_style      custom step temp pe etotal press vol pxx pyy pzz pxy pxz pyz
+neighbor          0.6 bin
+neigh_modify      every 5 delay 0 check yes
+
+variable          N equal step
+variable          pote equal pe
+variable          Etotal equal etotal
+variable          T equal temp
+variable          Press equal press
+variable          V equal vol
+variable          Pxx equal pxx
+variable          Pyy equal pyy
+variable          Pzz equal pzz
+variable          Pxy equal pxy
+variable          Pxz equal pxz
+variable          Pyz equal pyz
+
+compute           3 all pe/atom
+compute           4 all ke/atom
+compute           5 all coord/atom cutoff 4.0
+
+fix               extra all print 20 "${N} ${T} ${pote} ${Etotal} ${Press} ${V}  ${Pxx} ${Pyy} ${Pzz} ${Pxy} ${Pxz} ${Pyz}" file data_$x.dat screen no
+
+dump              1 all custom 10000 dump_$x.atom id type x y z c_3 c_4 c_5
+
+change_box        all z delta -80 80 
+
+fix               1 all nvt temp $x $x 0.02 drag 1
+run               20000
+unfix             1
+
+fix               2 all nvt temp $x $x 0.02 drag 1
+run               100000
+unfix             2
+
+undump            1
+
+write_restart	  restartsurf.$x

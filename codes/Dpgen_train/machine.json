@@ -1,0 +1,85 @@
+{
+    "api_version": "1.0",
+    "deepmd_version": "2.1.5",
+    "train": [
+        {
+            "command": "dp",
+            "machine": {
+                "batch_type": "Slurm",
+                "context_type": "SSH",
+                "local_root": "./",
+                "remote_root": "********",
+                "remote_profile": {
+                    "hostname": "*********",
+                    "username": "********",
+                    "password": "********",
+                    "port": 22
+                }
+            },
+            "resources": {
+                "number_node": 1,
+                "cpu_per_node": 4,
+                "gpu_per_node": 1,
+                "queue_name": "batch",
+                "group_size": 1,
+                "source_list": [
+                    "********"
+                ]
+            }
+        }
+    ],
+    "model_devi": [
+        {
+            "command": "lmp",
+            "machine": {
+                "batch_type": "Slurm",
+                "context_type": "SSH",
+                "local_root": "./",
+                "remote_root": "********",
+                "remote_profile": {
+                    "hostname": "*********",
+                    "username": "********",
+                    "password": "********",
+                    "port": 22
+                }
+            },
+            "resources": {
+                "number_node": 1,
+                "cpu_per_node": 4,
+                "gpu_per_node": 1,
+                "queue_name": "batch",
+                "group_size": 2,
+                "source_list": [
+                    "*********"
+                ]
+            }
+        }
+    ],
+    "fp": [
+        {
+            "command": "mpirun -np 64 /opt/software/vasp.6.3.0/bin/vasp_std",
+            "machine": {
+                "batch_type": "Slurm",
+                "context_type": "SSH",
+                "local_root": "./",
+                "remote_root": "********",
+                "remote_profile": {
+                    "hostname": "*********",
+                    "username": "********",
+                    "password": "********",
+                    "port": 22
+                }
+            },
+            "resources": {
+                "number_node": 1,
+                "cpu_per_node": 64,
+                "gpu_per_node": 0,
+                "queue_name": "batch",
+                "group_size": 1,
+                "source_list": [
+                    "********"
+                ]
+            }
+        }
+    ]
+}

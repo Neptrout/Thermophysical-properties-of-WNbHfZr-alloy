@@ -1,0 +1,88 @@
+# W-Nb-Hf-Zr
+
+units                 metal
+boundary              p p p
+atom_style            atomic
+
+read_data            WHA2_1.6W.atom
+
+timestep              0.001
+thermo                1000
+
+pair_style            deepmd graph-compress.pb
+pair_coeff            * * W Nb Hf Zr
+
+mass                 1 183.85
+mass                 2 92.90
+mass                 3 178.49
+mass                 4 91.22
+
+group                1 type 1
+group                2 type 2
+group                3 type 3
+group                4 type 4
+
+neighbor              0.6 bin
+neigh_modify          every 5 delay 0 check yes
+
+variable              N equal atoms
+variable              V equal vol
+variable              P equal press
+variable              T equal temp
+variable              E equal etotal
+variable              H equal enthalpy
+variable              pote equal pe
+variable              Pxx equal pxx
+variable              Pyy equal pyy
+variable              Pzz equal pzz
+variable              Pxy equal pxy
+variable              Pxz equal pxz
+variable              Pyz equal pyz
+
+compute               3 all pe/atom
+compute               4 all ke/atom
+compute               5 all coord/atom cutoff 4.0
+
+
+variable              x index 3300 3200 3100 3000 2900 2800 2700 2600 2500 2400 2300 2200 2100 2000 
+variable              y index 3400 3300 3200 3100 3000 2900 2800 2700 2600 2500 2400 2300 2200 2100 
+
+#initial velocity
+velocity              all create $y 825577 dist gaussian
+fix                   1 all npt temp $y $y 0.1 iso 0 0 1 drag 0.2
+dump                  1 all custom 1000 dumpinitial_$x.atom id type x y z c_3 c_4 c_5
+run                   300000
+unfix                 1
+undump                1
+
+label                 loop
+
+#cooling
+fix                   1 all npt temp $y $x 0.1 iso 1.0 1.0 1 drag 0.2
+dump                  1 all custom 1000 dumpcooling_$x.atom id type x y z c_3 c_4 c_5
+run                   100000
+unfix                 1
+undump                1
+
+#equilibrium
+
+fix                   1 all npt temp $x $x 0.01 iso 1.0 1.0 1 drag 0.2
+dump                  1 all custom 1000 dumpequ_$x.atom id type x y z c_3 c_4 c_5
+run                   200000
+unfix                 1
+undump                1
+
+write_restart	      restart.$x
+
+#output data
+fix                   1 all npt temp $x $x 0.01 iso 1.0 1.0 1 drag 0.2
+dump                  1 all custom 1000 dump_$x.atom id type x y z c_3 c_4 c_5
+fix                   info all print 1000 "${T} ${V} ${E} ${H} ${Pxx} ${Pyy} ${Pzz} ${Pxy} ${Pxz} ${Pyz}" file info_$x.dat screen no
+run                   100000
+unfix                 1
+undump                1
+unfix                 info
+
+next                  x
+next                  y
+jump                 lmp_density.in loop

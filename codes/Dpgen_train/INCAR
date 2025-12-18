@@ -1,0 +1,28 @@
+    SYSTEM = WNbHfZr
+   
+    PREC = Accurate                
+    ALGO = Normal             
+    ISTART = 0                  
+
+    ISMEAR = 0                  
+    SIGMA = 0.1
+
+    EDIFF = 1E-5                
+    ENCUT = 400                 
+    NELM = 100                 
+    LREAL = Auto                          
+    NELMIN = 4                                  
+    ICHARGE = 2                            
+
+    EDIFFG = 1E-3              
+    IBRION = -1                                 
+    ISIF = 2      
+    NSW = 0                                                                                         
+             
+    LCHARG = .FALSE.            
+    LWAVE = .FALSE. 
+
+    NCORE = 8           
+
+    KSPACING=0.5
+    KGAMMA=.FALSE.

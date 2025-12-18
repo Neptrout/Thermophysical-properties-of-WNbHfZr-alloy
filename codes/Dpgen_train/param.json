@@ -1,0 +1,214 @@
+{
+    "type_map": [
+        "W",
+        "Nb",
+        "Hf",
+        "Zr"
+    ],
+    "mass_map": [
+        183.84,
+        92.91,
+        178.49,
+        91.22
+    ],
+    "init_data_prefix": "./",
+    "init_data_sys": [
+        "inits/WNbHfZr/train_data"
+    ],
+    "sys_configs_prefix": "./",
+    "sys_configs": [
+        [
+            "configs/0/[0-8]/POSCAR"
+        ],
+        [
+            "configs/1/[0-8]/POSCAR"
+        ],
+        [
+            "configs/2/[0-8]/POSCAR"
+        ],
+        [
+            "configs/3/[0-8]/POSCAR"
+        ],
+        [
+            "configs/4/[0-8]/POSCAR"
+        ],
+        [
+            "configs/5/[0-8]/POSCAR"
+        ]
+    ],
+    "numb_models": 4,
+    "dp_compress": true,
+    "default_training_param": {
+        "model": {
+            "descriptor": {
+                "type": "se_e2_a",
+                "sel": [
+                    100,
+                    100,
+                    100,
+                    100
+                ],
+                "rcut_smth": 5.8,
+                "rcut": 6.0,
+                "neuron": [
+                    25,
+                    50,
+                    100
+                ],
+                "resnet_dt": false,
+                "axis_neuron": 16,
+                "seed": 1
+            },
+            "fitting_net": {
+                "neuron": [
+                    240,
+                    240,
+                    240
+                ],
+                "resnet_dt": true,
+                "seed": 1
+            }
+        },
+        "loss": {
+            "type": "ener",
+            "start_pref_e": 0.02,
+            "limit_pref_e": 1,
+            "start_pref_f": 1000,
+            "limit_pref_f": 1,
+            "start_pref_v": 100,
+            "limit_pref_v": 1
+        },
+        "learning_rate": {
+            "type": "exp",
+            "start_lr": 0.001,
+            "decay_steps": 5000,
+            "stop_lr": 3.5e-8
+        },
+        "training": {
+            "validation_data": {
+                "systems": [
+                    "/home/liukelun/run/WHA-2-liquid/validation_data"
+                ],
+                "batch_size": "auto",
+                "numb_btch": 5
+            },
+            "stop_batch": 1000000,
+            "seed": 10,
+            "disp_file": "lcurve.out",
+            "disp_freq": 1000,
+            "save_freq": 10000,
+            "save_ckpt": "model.ckpt",
+            "disp_training": true,
+            "time_training": true,
+            "training_data": {
+                "set_prefix": "set",
+                "batch_size": "auto",
+                "systems": []
+            }
+        }
+    },
+    "model_devi_dt": 0.002,
+    "model_devi_skip": 0,
+    "model_devi_f_trust_lo": 0.15,
+    "model_devi_f_trust_hi": 0.3,
+    "model_devi_clean_traj": false,
+    "model_devi_jobs": [
+        {
+            "sys_idx": [
+                0
+            ],
+            "temps": [
+                3300,
+                3100,
+                2900
+            ],
+            "trj_freq": 20,
+            "nsteps": 100000,
+            "ensemble": "nvt",
+            "_idx": "00"
+        },
+        {
+            "sys_idx": [
+                1
+            ],
+            "temps": [
+                3300,
+                3100,
+                2900
+            ],
+            "trj_freq": 20,
+            "nsteps": 100000,
+            "ensemble": "nvt",
+            "_idx": "01"
+        },
+        {
+            "sys_idx": [
+                2
+            ],
+            "temps": [
+                2900,
+                2700,
+                2500
+            ],
+            "trj_freq": 20,
+            "nsteps": 100000,
+            "ensemble": "nvt",
+            "_idx": "02"
+        },
+        {
+            "sys_idx": [
+                3
+            ],
+            "temps": [
+                2900,
+                2700,
+                2500
+            ],
+            "trj_freq": 20,
+            "nsteps": 100000,
+            "ensemble": "nvt",
+            "_idx": "03"
+        },
+        {
+            "sys_idx": [
+                4
+            ],
+            "temps": [
+                2500,
+                2300,
+                2100
+            ],
+            "trj_freq": 20,
+            "nsteps": 100000,
+            "ensemble": "nvt",
+            "_idx": "04"
+        },
+        {
+            "sys_idx": [
+                5
+            ],
+            "temps": [
+                2500,
+                2300,
+                2100
+            ],
+            "trj_freq": 20,
+            "nsteps": 100000,
+            "ensemble": "nvt",
+            "_idx": "05"
+        }
+    ],
+    "fp_style": "vasp",
+    "shuffle_poscar": false,
+    "fp_task_max": 1000,
+    "fp_task_min": 10,
+    "ratio_failed": 10,
+    "fp_pp_path": "./pp/",
+    "fp_pp_files": [
+        "POTCAR_W",
+        "POTCAR_Nb",
+        "POTCAR_Hf",
+        "POTCAR_Zr"
+    ],
+    "fp_incar": "./INCAR"
+}
